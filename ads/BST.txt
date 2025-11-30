@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left, *right;
+};
+
+// Create a new node
+struct node* createNode(int value) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Insert element in BST
+struct node* insert(struct node* root, int value) {
+    if (root == NULL)
+        return createNode(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+
+    return root;
+}
+
+// Inorder traversal (Left, Root, Right)
+void inorder(struct node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// Preorder traversal (Root, Left, Right)
+void preorder(struct node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Postorder traversal (Left, Right, Root)
+void postorder(struct node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Search an element in BST
+struct node* search(struct node* root, int key) {
+    if (root == NULL || root->data == key)
+        return root;
+
+    if (key < root->data)
+        return search(root->left, key);
+    else
+        return search(root->right, key);
+}
+
+int main() {
+    struct node* root = NULL;
+    int choice, value;
+
+    while (1) {
+        printf("\n--- BST MENU ---\n");
+        printf("1. Insert\n");
+        printf("2. Search\n");
+        printf("3. Inorder Traversal\n");
+        printf("4. Preorder Traversal\n");
+        printf("5. Postorder Traversal\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                root = insert(root, value);
+                break;
+
+            case 2:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+                if (search(root, value) != NULL)
+                    printf("%d found\n", value);
+                else
+                    printf("%d not found\n", value);
+                break;
+
+            case 3:
+                printf("Inorder: ");
+                inorder(root);
+                printf("\n");
+                break;
+
+            case 4:
+                printf("Preorder: ");
+                preorder(root);
+                printf("\n");
+                break;
+
+            case 5:
+                printf("Postorder: ");
+                postorder(root);
+                printf("\n");
+                break;
+
+            case 6:
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+}
